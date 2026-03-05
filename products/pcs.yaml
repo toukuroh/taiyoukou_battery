@@ -1,0 +1,102 @@
+# =============================================================
+# パワーコンディショナ (PCS) 製品データベース
+# 出典: 各メーカー公式データシート (2024年時点の参考値)
+# =============================================================
+#
+# パラメータ説明:
+#   rated_kw     : 定格出力 [kW]
+#   efficiency   : 最大変換効率 / CEC 平均効率 [-]
+#   system_type  : 単相 / 三相
+#   price_yen    : 参考価格 [円] (工事費別)
+#
+# ※ PCS の定格出力がパネル合計出力より小さい場合、出力クリッピングが発生します。
+#   一般的に「PCS 定格 / パネル DC 合計出力」= DC/AC 比 1.0〜1.3 が推奨範囲です。
+#   (例: 5.5kW PCS に対して DC 出力 ~5.5〜7.2kW 相当のパネルが適正)
+# =============================================================
+
+pcs:
+
+  # ---- Omron (オムロン) ----
+
+  - model: "Omron KP-LM-KU-55-JP"
+    maker: "Omron"
+    rated_kw: 5.5
+    efficiency: 0.972          # CEC 平均効率 (日本 JIS C 8961 相当)
+    system_type: "単相 2 線式"
+    price_yen: 145000
+    note: "国内シェアが高い標準モデル。"
+
+  - model: "Omron KP-LM-KU-40-JP"
+    maker: "Omron"
+    rated_kw: 4.0
+    efficiency: 0.970
+    system_type: "単相 2 線式"
+    price_yen: 120000
+    note: "小規模 PV (〜4kW) 向け。"
+
+  # ---- Sharp (シャープ) ----
+
+  - model: "Sharp JH-55LZ"
+    maker: "Sharp"
+    rated_kw: 5.5
+    efficiency: 0.974
+    system_type: "単相 2 線式"
+    price_yen: 148000
+    note: "Sharp PV との相性が良いモデル。AIエネルギー管理対応。"
+
+  - model: "Sharp JH-75LZ"
+    maker: "Sharp"
+    rated_kw: 7.5
+    efficiency: 0.975
+    system_type: "単相 2 線式"
+    price_yen: 168000
+    note: "7.5kW 大容量単相。太陽光 8〜10kW システム向け。"
+
+  # ---- Panasonic (パナソニック) ----
+
+  - model: "Panasonic VBPC225A3"
+    maker: "Panasonic"
+    rated_kw: 5.9
+    efficiency: 0.975
+    system_type: "単相 2 線式"
+    price_yen: 155000
+    note: "EverVolt H との DC 直結システム専用。"
+
+  # ---- SolarEdge ----
+
+  - model: "SolarEdge SE5000H-JP"
+    maker: "SolarEdge"
+    rated_kw: 5.0
+    efficiency: 0.990          # MPPTトラッキング効率が非常に高い
+    system_type: "単相 2 線式 (DC オプティマイザ方式)"
+    price_yen: 180000
+    note: "DC オプティマイザで各パネルを個別制御。影の影響を最小化。"
+
+  - model: "SolarEdge SE7600H-JP"
+    maker: "SolarEdge"
+    rated_kw: 7.6
+    efficiency: 0.990
+    system_type: "単相 2 線式 (DC オプティマイザ方式)"
+    price_yen: 210000
+    note: "7.6kW ハイパワー版 DC オプティマイザ方式。"
+
+  # ---- Huawei (ファーウェイ) ----
+
+  - model: "Huawei SUN2000-6KTL-M1"
+    maker: "Huawei"
+    rated_kw: 6.0
+    efficiency: 0.985
+    system_type: "単相 2 線式"
+    price_yen: 160000
+    note: "LUNA2000 蓄電池との DC 連系に最適。スマートロガー連携。"
+
+  # ---- Sungrow (サングロウ) ----
+
+  - model: "Sungrow SH6.0RS-JP"
+    maker: "Sungrow"
+    series: "SH Hybrid"
+    rated_kw: 6.0
+    efficiency: 0.978
+    system_type: "単相 2 線式 (ハイブリッド)"
+    price_yen: 175000
+    note: "SBR 蓄電池との DC 連系専用ハイブリッドパワコン。"

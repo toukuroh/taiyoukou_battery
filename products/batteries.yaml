@@ -1,0 +1,229 @@
+# =============================================================
+# 蓄電池 製品データベース
+# 出典: 各メーカー公式データシート・カタログ (2024年時点の参考値)
+# =============================================================
+#
+# パラメータ説明:
+#   capacity_kwh      : 蓄電容量 [kWh]  (メーカー公称値 = 使用可能容量)
+#   capacity_gross_kwh: 総容量 [kWh]    (内部容量。省略時は capacity_kwh と同じ)
+#   charge_efficiency   : 充電効率 [-]   (往復効率 = charge × discharge)
+#   discharge_efficiency: 放電効率 [-]
+#   max_charge_kw     : 最大充電電力 [kW]
+#   max_discharge_kw  : 最大放電電力 [kW]
+#   soc_min           : SOC 下限 [-]    (0.0 = メーカーが内部管理)
+#   soc_max           : SOC 上限 [-]    (1.0 = メーカーが内部管理)
+#   system_type       : 接続方式 (AC連系 / DC連系 / ハイブリッド)
+#   price_yen         : 本体参考価格 [円] (工事費・パワコン別)
+#
+# ※ count > 1 のとき: capacity_kwh × count で計算
+#   ただし max_charge_kw / max_discharge_kw はモデルによって増加しない場合あり
+#   → batteries.yaml の scalable_power: true/false で制御
+# =============================================================
+
+batteries:
+
+  # ---- Tesla ----
+
+  - model: "Tesla Powerwall 3"
+    maker: "Tesla"
+    capacity_kwh: 13.5          # 使用可能容量 (公称)
+    capacity_gross_kwh: 15.0    # 総容量
+    charge_efficiency: 0.960    # 往復効率 ~92% → 各方向 √0.92 ≈ 0.96
+    discharge_efficiency: 0.960
+    max_charge_kw: 11.5         # 連続充電 (太陽光入力含む合計)
+    max_discharge_kw: 11.5      # 連続放電
+    peak_discharge_kw: 30.0     # ピーク放電 (10秒)
+    soc_min: 0.0                # Tesla は容量=使用可能容量として管理
+    soc_max: 1.0
+    system_type: "ハイブリッド (AC/DC 統合インバータ内蔵)"
+    scalable_power: false       # 複数台でも最大電力は変わらない (AC結合のため)
+    price_yen: 1530000          # 本体+工事費込みの市場価格参考
+    note: "インバータ内蔵・単体で完結。停電時の全負荷バックアップ対応。"
+
+  - model: "Tesla Powerwall 2"
+    maker: "Tesla"
+    capacity_kwh: 13.5
+    capacity_gross_kwh: 14.0
+    charge_efficiency: 0.950
+    discharge_efficiency: 0.950
+    max_charge_kw: 7.6
+    max_discharge_kw: 7.0
+    peak_discharge_kw: 22.0
+    soc_min: 0.0
+    soc_max: 1.0
+    system_type: "ハイブリッド (AC 統合インバータ内蔵)"
+    scalable_power: false
+    price_yen: 1100000
+    note: "旧モデル。在庫品として流通あり。"
+
+  # ---- Panasonic (パナソニック) ----
+
+  - model: "Panasonic LJ-SF120A"
+    maker: "Panasonic"
+    series: "創蓄連携システム S+"
+    capacity_kwh: 11.52
+    capacity_gross_kwh: 12.0
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 5.9
+    max_discharge_kw: 5.9
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "DC 連系 (専用パワコンと組み合わせ)"
+    scalable_power: true        # 増設モジュールで容量拡張可
+    price_yen: 750000
+    note: "Panasonic PV との DC 直結で変換ロス最小。創蓄連携システム。"
+
+  - model: "Panasonic LJ-SF200A"
+    maker: "Panasonic"
+    series: "創蓄連携システム S+ 大容量"
+    capacity_kwh: 19.84
+    capacity_gross_kwh: 20.0
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 5.9
+    max_discharge_kw: 5.9
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "DC 連系"
+    scalable_power: true
+    price_yen: 1200000
+    note: "大容量モデル。ZEH+・V2H 連携を想定した構成。"
+
+  # ---- Sharp (シャープ) ----
+
+  - model: "Sharp JH-WB1821"
+    maker: "Sharp"
+    series: "クラウドストレージ"
+    capacity_kwh: 12.0
+    capacity_gross_kwh: 12.6
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 5.9
+    max_discharge_kw: 5.9
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "AC 連系 (パワコン別途)"
+    scalable_power: false
+    price_yen: 680000
+    note: "Sharp 製 PV との親和性が高い。AIスケジュール機能付き。"
+
+  - model: "Sharp JH-WB2021"
+    maker: "Sharp"
+    series: "クラウドストレージ"
+    capacity_kwh: 9.5
+    capacity_gross_kwh: 10.0
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 4.0
+    max_discharge_kw: 4.0
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "AC 連系"
+    scalable_power: false
+    price_yen: 550000
+    note: "コンパクトモデル。設置スペースが限られる住宅向け。"
+
+  # ---- Huawei (ファーウェイ) ----
+
+  - model: "Huawei LUNA2000-15-S0"
+    maker: "Huawei"
+    series: "LUNA2000"
+    capacity_kwh: 15.0         # 5kWh モジュール × 3
+    capacity_gross_kwh: 15.36
+    charge_efficiency: 0.975
+    discharge_efficiency: 0.975
+    max_charge_kw: 5.0
+    max_discharge_kw: 5.0
+    soc_min: 0.04
+    soc_max: 0.96
+    system_type: "DC 連系 (Huawei SUN2000 インバータと組み合わせ)"
+    scalable_power: true        # モジュール追加で容量・出力拡張
+    price_yen: 600000
+    note: "モジュール式で 5→10→15kWh と柔軟に拡張可能。"
+
+  - model: "Huawei LUNA2000-10-S0"
+    maker: "Huawei"
+    series: "LUNA2000"
+    capacity_kwh: 10.0
+    capacity_gross_kwh: 10.24
+    charge_efficiency: 0.975
+    discharge_efficiency: 0.975
+    max_charge_kw: 5.0
+    max_discharge_kw: 5.0
+    soc_min: 0.04
+    soc_max: 0.96
+    system_type: "DC 連系"
+    scalable_power: true
+    price_yen: 450000
+    note: "10kWh スタンダードモデル。"
+
+  # ---- Omron (オムロン) ----
+
+  - model: "Omron KPBP-A-2"
+    maker: "Omron"
+    series: "マルチV2Hシステム"
+    capacity_kwh: 9.8
+    capacity_gross_kwh: 10.0
+    charge_efficiency: 0.965
+    discharge_efficiency: 0.965
+    max_charge_kw: 4.0
+    max_discharge_kw: 4.0
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "AC 連系"
+    scalable_power: false
+    price_yen: 490000
+    note: "V2H (Vehicle to Home) 対応。EV との連携が得意。"
+
+  # ---- Sungrow (サングロウ) ----
+
+  - model: "Sungrow SBR128T"
+    maker: "Sungrow"
+    series: "SBR"
+    capacity_kwh: 12.8          # 3.2kWh モジュール × 4
+    capacity_gross_kwh: 13.1
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 5.0
+    max_discharge_kw: 5.0
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "DC 連系 (Sungrow SH インバータと組み合わせ)"
+    scalable_power: true
+    price_yen: 520000
+    note: "3.2kWh 単位で増設可能 (最大 25.6kWh)。コスパ重視。"
+
+  - model: "Sungrow SBR064T"
+    maker: "Sungrow"
+    series: "SBR"
+    capacity_kwh: 6.4
+    capacity_gross_kwh: 6.55
+    charge_efficiency: 0.970
+    discharge_efficiency: 0.970
+    max_charge_kw: 3.5
+    max_discharge_kw: 3.5
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "DC 連系"
+    scalable_power: true
+    price_yen: 310000
+    note: "少容量スタートで後から増設できるエントリーモデル。"
+
+  # ---- Daikin (ダイキン) ----
+
+  - model: "Daikin SeLa D-BAS100"
+    maker: "Daikin"
+    series: "SeLa"
+    capacity_kwh: 10.0
+    capacity_gross_kwh: 10.5
+    charge_efficiency: 0.968
+    discharge_efficiency: 0.968
+    max_charge_kw: 4.0
+    max_discharge_kw: 4.0
+    soc_min: 0.05
+    soc_max: 0.95
+    system_type: "AC 連系"
+    scalable_power: false
+    price_yen: 580000
+    note: "エアコンメーカーのノウハウを活かした温度管理設計。"

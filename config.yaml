@@ -1,0 +1,129 @@
+# =============================================================
+# 太陽光パネル・蓄電池シミュレーション 設定ファイル
+# =============================================================
+# 製品名は products/ ディレクトリの YAML に登録されている model: と一致させる
+# 製品一覧表示: python -X utf8 main.py --list
+
+# ---- 地点情報 ----
+location:
+  name: "東京"
+  latitude: 35.69        # 緯度 [deg]
+  longitude: 139.69      # 経度 [deg]
+  altitude: 25           # 標高 [m]
+  timezone: "Asia/Tokyo"
+
+# ---- 気象データ ----
+data:
+  ea20_path: "data/ea20.csv"   # NEDO METPV-20 からダウンロードしたEA-20データのパス
+  # 寡照年データを使う場合は ea20_path に寡照年CSVのパスを指定する
+
+# ---- 太陽光パネル ----
+pv_system:
+  # --- 製品選択 ---
+  panel_model: "Jinko Tiger Neo JKM415N-54HL4-V"   # products/solar_panels.yaml 参照
+  panel_count: 14                                    # 枚数
+
+  pcs_model: "Omron KP-LM-KU-55-JP"                # products/pcs.yaml 参照
+
+  # --- 設置条件 ---
+  tilt: 30       # 傾斜角 [deg]  (屋根勾配: 4寸~21.8度, 5寸~26.6度, 6寸~31度)
+  azimuth: 180   # 方位角 [deg]  (pvlib基準: 0=北, 90=東, 180=南, 270=西)
+
+  # --- システムロス (配線・汚れ・ミスマッチ等) ---
+  system_loss: 0.05    # [-]  (例: 0.05 = 5%)
+
+  # --- 手動上書き (省略時は製品DBの値を使用) ---
+  # panel_efficiency: 0.215
+  # temp_coefficient: -0.0030
+  # noct: 45
+
+# ---- 包囲角（障害物による遮蔽）----
+obstruction:
+  enabled: true
+  # 各方位での障害物の仰角 [deg]
+  # 方位: 0=北, 45=北東, 90=東, 135=南東, 180=南, 225=南西, 270=西, 315=北西
+  horizon_angles:
+    0:   0.0
+    45:  0.0
+    90:  3.0   # 東側隣家など
+    135: 5.0
+    180: 2.0   # 南側工作物など
+    225: 5.0
+    270: 3.0
+    315: 0.0
+
+# ---- 蓄電池 ----
+battery:
+  # --- 製品選択 ---
+  model: "Sharp JH-WB1821"    # products/batteries.yaml 参照
+  count: 1                     # 台数 (count > 1 のとき容量を count 倍)
+
+  # --- 運用設定 ---
+  initial_soc: 0.50            # シミュレーション開始時 SOC [-]
+
+  # --- 手動上書き (省略時は製品DBの値を使用) ---
+  # soc_min: 0.05
+  # soc_max: 0.95
+
+# ---- 建物スペック ----
+building:
+  floor_area: 120.0        # 床面積 [m2]
+  envelope_area: 350.0     # 外皮面積 [m2] (外壁+屋根+床の合計面積)
+
+  # 断熱性能
+  ua_value: 0.46           # UA値 [W/m2K]
+                           #   HEAT20 G1:<=0.56, G2:<=0.46, G3:<=0.26 / ZEH:<=0.6
+  eta_ac: 2.8              # 冷房期 日射熱取得率 etaAC [%]  (省エネ計算書に記載)
+
+  occupants: 3
+  internal_gain_per_person_w: 80  # 在室時の人体発熱 [W/人]
+
+  # HVAC（エアコン）
+  hvac:
+    heating_setpoint: 20.0    # 暖房設定温度 [°C]
+    cooling_setpoint: 26.0    # 冷房設定温度 [°C]
+    cop_heating: 4.5
+    cop_cooling: 5.5
+    heating_months: [11, 12, 1, 2, 3]
+    cooling_months: [6, 7, 8, 9]
+    operation_start_h: 6
+    operation_end_h: 23
+
+  # ベース負荷（家電・照明等）時刻別 [W]
+  base_load_w:
+    0:  150
+    1:  150
+    2:  150
+    3:  150
+    4:  150
+    5:  200
+    6:  900
+    7:  1100
+    8:  700
+    9:  400
+    10: 350
+    11: 400
+    12: 600
+    13: 350
+    14: 350
+    15: 350
+    16: 400
+    17: 900
+    18: 1300
+    19: 1200
+    20: 1000
+    21: 900
+    22: 700
+    23: 300
+
+  # 給湯（ヒートポンプ給湯機）
+  hot_water:
+    daily_kwh: 3.5       # 1日あたり給湯電力量 [kWh/日]
+    operation_hour: 1    # 深夜運転開始時刻
+    operation_hours: 3   # 運転時間 [h]
+    cop: 3.5
+
+# ---- 出力 ----
+output:
+  csv_path: "output/simulation_result.csv"
+  excel_path: "output/simulation_result.xlsx"

@@ -1,0 +1,177 @@
+# =============================================================
+# 太陽光パネル 製品データベース
+# 出典: 各メーカー公式データシート (2024年時点の参考値)
+# =============================================================
+#
+# 各パラメータの説明:
+#   power_w          : 公称最大出力 [W] (STC: 1000W/m², 25°C, AM1.5)
+#   efficiency       : モジュール変換効率 [-]  (例: 0.215 = 21.5%)
+#   area_m2          : モジュール面積 [m²]  ← power_w / (efficiency × 1000) で導出
+#   temp_coefficient : 最大出力温度係数 [/°C]  (例: -0.0035 = -0.35%/°C)
+#   noct             : 公称動作セル温度 NOCT [°C]
+#   cell_type        : セル種別
+#   price_yen        : 参考単価 [円/枚] (工事費別・参考値)
+#
+# ※ panel_area (m²) はモジュール面積です。
+#   シミュレーションでは panel_area × panel_count が pv_generation.py に渡されます。
+# =============================================================
+
+panels:
+
+  # ---- Panasonic (パナソニック) ----
+
+  - model: "Panasonic EverVolt H 430W"
+    maker: "Panasonic"
+    series: "EverVolt H (HIT/HJT)"
+    power_w: 430
+    efficiency: 0.222       # 22.2%
+    area_m2: 1.937          # 430 / (0.222 × 1000)
+    temp_coefficient: -0.0026  # HIT は温度係数が低い
+    noct: 44
+    cell_type: "HIT (HJT)"
+    price_yen: 82000
+    note: "業界最高水準の低温度係数。日射量が少ない冬季・梅雨に有利。"
+
+  - model: "Panasonic EverVolt H 415W"
+    maker: "Panasonic"
+    series: "EverVolt H (HIT/HJT)"
+    power_w: 415
+    efficiency: 0.214       # 21.4%
+    area_m2: 1.939
+    temp_coefficient: -0.0026
+    noct: 44
+    cell_type: "HIT (HJT)"
+    price_yen: 78000
+    note: "EverVolt H スタンダードモデル。"
+
+  # ---- Sharp (シャープ) ----
+
+  - model: "Sharp NU-400MR"
+    maker: "Sharp"
+    series: "BLACKSOLAR ZERO"
+    power_w: 400
+    efficiency: 0.208       # 20.8%
+    area_m2: 1.923          # 400 / (0.208 × 1000)
+    temp_coefficient: -0.0036
+    noct: 46
+    cell_type: "Mono-Si 裏面電極型"
+    price_yen: 56000
+    note: "裏面電極型。電極が見えないブラックフレームでデザイン性が高い。"
+
+  - model: "Sharp NU-380MS"
+    maker: "Sharp"
+    series: "BLACKSOLAR"
+    power_w: 380
+    efficiency: 0.197       # 19.7%
+    area_m2: 1.929
+    temp_coefficient: -0.0036
+    noct: 46
+    cell_type: "Mono-Si 裏面電極型"
+    price_yen: 50000
+    note: "BLACKSOLAR エントリーモデル。"
+
+  # ---- Q Cells (ハンファQセルズ) ----
+
+  - model: "Q Cells Q.PEAK DUO ML-G10+ 400W"
+    maker: "Q Cells (Hanwha)"
+    series: "Q.PEAK DUO ML-G10+"
+    power_w: 400
+    efficiency: 0.206       # 20.6%
+    area_m2: 1.942
+    temp_coefficient: -0.0036
+    noct: 45
+    cell_type: "Mono-Si PERC (ハーフカット)"
+    price_yen: 44000
+    note: "信頼性の高いドイツ設計。10年生産物保証付き。"
+
+  - model: "Q Cells Q.PEAK DUO BLK ML-G10 380W"
+    maker: "Q Cells (Hanwha)"
+    series: "Q.PEAK DUO BLK ML-G10"
+    power_w: 380
+    efficiency: 0.196       # 19.6%
+    area_m2: 1.939
+    temp_coefficient: -0.0036
+    noct: 45
+    cell_type: "Mono-Si PERC (ハーフカット, フルブラック)"
+    price_yen: 40000
+    note: "フルブラック仕様。デザイン優先の住宅向け。"
+
+  # ---- LONGi Solar (ロンジ) ----
+
+  - model: "LONGi Hi-MO 6 LR5-54HTH-410M"
+    maker: "LONGi"
+    series: "Hi-MO 6"
+    power_w: 410
+    efficiency: 0.213       # 21.3%
+    area_m2: 1.925
+    temp_coefficient: -0.0034
+    noct: 45
+    cell_type: "Mono-Si HPBC (高効率)"
+    price_yen: 40000
+    note: "大手メーカーの主力品。コスパと効率のバランスが良い。"
+
+  - model: "LONGi Hi-MO X6 LR5-54HTC-420M"
+    maker: "LONGi"
+    series: "Hi-MO X6"
+    power_w: 420
+    efficiency: 0.218       # 21.8%
+    area_m2: 1.927
+    temp_coefficient: -0.0028  # N型の低温度係数
+    noct: 44
+    cell_type: "N-Type Mono-Si (HPBC)"
+    price_yen: 46000
+    note: "N型セル搭載の高効率版。温度係数が改善。"
+
+  # ---- Jinko Solar (ジンコソーラー) ----
+
+  - model: "Jinko Tiger Neo JKM415N-54HL4-V"
+    maker: "Jinko Solar"
+    series: "Tiger Neo (N-Type TOPCon)"
+    power_w: 415
+    efficiency: 0.215       # 21.5%
+    area_m2: 1.930
+    temp_coefficient: -0.0030  # N型: 低温度係数
+    noct: 45
+    cell_type: "N-Type Mono-Si TOPCon"
+    price_yen: 42000
+    note: "N型TOPCon。低照度特性・PID耐性が優れる。"
+
+  - model: "Jinko Tiger Neo JKM430N-54HL4-B"
+    maker: "Jinko Solar"
+    series: "Tiger Neo (N-Type TOPCon, Black)"
+    power_w: 430
+    efficiency: 0.223       # 22.3%
+    area_m2: 1.928
+    temp_coefficient: -0.0030
+    noct: 45
+    cell_type: "N-Type Mono-Si TOPCon (フルブラック)"
+    price_yen: 48000
+    note: "フルブラック×高効率。外観にこだわる住宅向け。"
+
+  # ---- Canadian Solar (カナディアンソーラー) ----
+
+  - model: "Canadian Solar HiKu6 CS6R-400MS"
+    maker: "Canadian Solar"
+    series: "HiKu6 (Mono PERC)"
+    power_w: 400
+    efficiency: 0.203       # 20.3%
+    area_m2: 1.970
+    temp_coefficient: -0.0035
+    noct: 43
+    cell_type: "Mono-Si PERC"
+    price_yen: 39000
+    note: "信頼性・価格のバランス型。25年線形出力保証。"
+
+  # ---- REC Group ----
+
+  - model: "REC Alpha Pure-R 410AA"
+    maker: "REC Group"
+    series: "Alpha Pure-R"
+    power_w: 410
+    efficiency: 0.222       # 22.2%
+    area_m2: 1.847
+    temp_coefficient: -0.0024  # HJT型の超低温度係数
+    noct: 44
+    cell_type: "HJT (Heterojunction)"
+    price_yen: 68000
+    note: "ノルウェー設計のHJT。温度係数はPanasonicと並ぶ業界最低水準。"
